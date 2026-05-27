@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
 import { registerWithEmail, loginWithGoogle } from '@/services';
@@ -72,18 +72,18 @@ export function RegisterPage() {
     }
   };
 
-  const inputBase    = 'w-full rounded-xl border bg-background pl-10 pr-4 py-2.5 text-sm transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground/60';
-  const inputValid   = 'border-border focus:border-ring';
-  const inputInvalid = 'border-destructive/60 focus:ring-destructive/40';
+  const inputBase    = 'w-full rounded-xl border bg-background pl-10 pr-4 py-3 text-sm transition-all duration-150 focus:outline-none focus:ring-2 placeholder:text-muted-foreground/50';
+  const inputValid   = 'border-border focus:ring-[#C4A574]/30 focus:border-[#C4A574]';
+  const inputInvalid = 'border-destructive/50 focus:ring-destructive/30';
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-foreground mb-1">Create your account</h2>
-      <p className="text-sm text-muted-foreground mb-6">Start managing your properties in minutes.</p>
+      <h2 className="text-[1.75rem] font-bold text-foreground mb-1 tracking-tight">Create your account</h2>
+      <p className="text-sm text-muted-foreground mb-7">Start managing your properties in minutes.</p>
 
       {error && (
-        <div className="mb-5 rounded-xl bg-destructive/10 border border-destructive/20 p-3.5 text-sm text-destructive flex items-start gap-2">
-          <span className="mt-0.5 shrink-0">⚠</span>
+        <div className="mb-5 flex items-start gap-2.5 rounded-xl bg-destructive/8 border border-destructive/20 px-4 py-3 text-sm text-destructive">
+          <span className="mt-0.5 shrink-0 text-base">⚠</span>
           {error}
         </div>
       )}
@@ -194,11 +194,7 @@ export function RegisterPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-xl py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50 transition-all duration-150"
-          style={{
-            background: 'linear-gradient(135deg, hsl(45 58% 62%) 0%, hsl(38 55% 52%) 100%)',
-            boxShadow: loading ? 'none' : '0 2px 12px hsla(45, 55%, 50%, 0.30)',
-          }}
+          className="btn-primary w-full rounded-xl py-3 text-sm"
         >
           {loading ? 'Creating account…' : 'Create account'}
         </button>
@@ -210,14 +206,14 @@ export function RegisterPage() {
             <div className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-card px-3 text-muted-foreground">or continue with</span>
+            <span className="bg-card px-3 text-muted-foreground font-medium">or</span>
           </div>
         </div>
 
         <button
           onClick={handleGoogleLogin}
           disabled={loading}
-          className="w-full rounded-xl border border-border px-4 py-2.5 text-sm font-medium hover:bg-muted disabled:opacity-50 transition-all duration-150 flex items-center justify-center gap-2"
+          className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-semibold hover:bg-muted disabled:opacity-50 transition-all duration-150 flex items-center justify-center gap-2.5"
         >
           <svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true">
             <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.6 32.9 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 3l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.6-.4-3.9z"/>
@@ -231,7 +227,7 @@ export function RegisterPage() {
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Already have an account?{' '}
-        <Link to="/login" className="text-primary hover:text-primary/80 font-semibold transition-colors">
+        <Link to="/login" className="text-[#C4A574] hover:underline font-semibold">
           Sign in
         </Link>
       </p>
@@ -239,151 +235,3 @@ export function RegisterPage() {
   );
 }
 
-
-export function RegisterPage() {
-  const [displayName, setDisplayName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
-
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      await registerWithEmail(email, password, displayName);
-      navigate('/dashboard');
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Registration failed';
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    setError('');
-    setLoading(true);
-
-    try {
-      await loginWithGoogle();
-      navigate('/dashboard');
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Google login failed';
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div>
-      <h2 className="text-xl font-semibold mb-6">Create your account</h2>
-
-      {error && (
-        <div className="mb-4 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-1.5">Full Name</label>
-          <input
-            type="text"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-            required
-            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            placeholder="Juan Dela Cruz"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1.5">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            placeholder="you@example.com"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1.5">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            placeholder="••••••••"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1.5">Confirm Password</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-            className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            placeholder="••••••••"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors"
-        >
-          {loading ? 'Creating account...' : 'Create account'}
-        </button>
-      </form>
-
-      <div className="mt-4">
-        <div className="relative my-4">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-border" />
-          </div>
-          <div className="relative flex justify-center text-xs">
-            <span className="bg-card px-2 text-muted-foreground">or</span>
-          </div>
-        </div>
-
-        <button
-          onClick={handleGoogleLogin}
-          disabled={loading}
-          className="w-full rounded-lg border border-border px-4 py-2.5 text-sm font-medium hover:bg-muted disabled:opacity-50 transition-colors"
-        >
-          Continue with Google
-        </button>
-      </div>
-
-      <p className="mt-6 text-center text-sm text-muted-foreground">
-        Already have an account?{' '}
-        <Link to="/login" className="text-primary hover:underline font-medium">
-          Sign in
-        </Link>
-      </p>
-    </div>
-  );
-}

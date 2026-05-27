@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -9,7 +10,7 @@ import { getBookings } from '@/services/bookingService';
 import { getProperties } from '@/services/propertyService';
 import { formatDate, formatCurrency } from '@/utils';
 import { Booking } from '@/types';
-import { X } from 'lucide-react';
+import { X, Pencil } from 'lucide-react';
 
 const STATUS_COLORS: Record<string, string> = {
   confirmed: '#22c55e',
@@ -21,6 +22,7 @@ const STATUS_COLORS: Record<string, string> = {
 export function CalendarPage() {
   const { hostUser } = useAuth();
   const subscription = useSubscription();
+  const navigate = useNavigate();
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [propertyFilter, setPropertyFilter] = useState('');
 
@@ -103,28 +105,71 @@ export function CalendarPage() {
 
       {/* Booking detail modal */}
       {selectedBooking && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4" onClick={() => setSelectedBooking(null)}>
-          <div className="rounded-xl bg-card border border-border p-6 w-full max-w-md shadow-lg" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">{selectedBooking.guestName}</h3>
-              <button onClick={() => setSelectedBooking(null)} className="text-muted-foreground hover:text-foreground">
-                <X size={20} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4" onClick={() => setSelectedBooking(null)}>
+          <div className="rounded-2xl bg-card border border-border w-full max-w-md shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-border">
+              <div>
+                <h3 className="text-lg font-semibold">{selectedBooking.guestName}</h3>
+                <p className="text-sm text-muted-foreground">{selectedBooking.propertyName}</p>
+              </div>
+              <button onClick={() => setSelectedBooking(null)} className="rounded-full p-1.5 text-muted-foreground hover:bg-muted transition-colors">
+                <X size={18} />
               </button>
             </div>
-            <div className="space-y-2 text-sm">
-              <p><span className="text-muted-foreground">Property:</span> {selectedBooking.propertyName}</p>
-              <p><span className="text-muted-foreground">Check-in:</span> {formatDate(selectedBooking.checkIn.toDate())}</p>
-              <p><span className="text-muted-foreground">Check-out:</span> {formatDate(selectedBooking.checkOut.toDate())}</p>
-              <p><span className="text-muted-foreground">Nights:</span> {selectedBooking.nights}</p>
-              <p><span className="text-muted-foreground">Status:</span> <span className="capitalize">{selectedBooking.status}</span></p>
-              <p><span className="text-muted-foreground">Revenue:</span> {formatCurrency(selectedBooking.revenue)}</p>
-              <p><span className="text-muted-foreground">Net Profit:</span> {formatCurrency(selectedBooking.netProfit)}</p>
+            {/* Body */}
+            <div className="px-6 py-4 space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Check-in</span>
+                <span className="font-medium">{formatDate(selectedBooking.checkIn.toDate())}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Check-out</span>
+                <span className="font-medium">{formatDate(selectedBooking.checkOut.toDate())}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Nights</span>
+                <span className="font-medium">{selectedBooking.nights}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Status</span>
+                <span className={`status-${selectedBooking.status} capitalize text-xs px-2 py-0.5 rounded-full`}>{selectedBooking.status}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Revenue</span>
+                <span className="font-medium">{formatCurrency(selectedBooking.revenue)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Net Profit</span>
+                <span className="font-medium">{formatCurrency(selectedBooking.netProfit)}</span>
+              </div>
               {selectedBooking.guestPhone && (
-                <p><span className="text-muted-foreground">Phone:</span> {selectedBooking.guestPhone}</p>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Phone</span>
+                  <span className="font-medium">{selectedBooking.guestPhone}</span>
+                </div>
               )}
               {selectedBooking.notes && (
-                <p><span className="text-muted-foreground">Notes:</span> {selectedBooking.notes}</p>
+                <div className="pt-2 border-t border-border">
+                  <p className="text-muted-foreground mb-1">Notes</p>
+                  <p>{selectedBooking.notes}</p>
+                </div>
               )}
+            </div>
+            {/* Footer */}
+            <div className="px-6 pb-5 pt-3 border-t border-border flex gap-3">
+              <button
+                onClick={() => setSelectedBooking(null)}
+                className="flex-1 rounded-xl border border-border py-2.5 text-sm font-medium hover:bg-muted transition-colors"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => navigate(`/bookings/${selectedBooking.id}/edit`)}
+                className="flex-1 btn-primary flex items-center justify-center gap-2"
+              >
+                <Pencil size={14} /> Edit Booking
+              </button>
             </div>
           </div>
         </div>

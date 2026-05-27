@@ -1,4 +1,4 @@
-import { Lock, MessageCircle, Zap } from 'lucide-react';
+﻿import { Lock, MessageCircle, Zap } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { requestPlanUpgrade } from '@/services/authService';
 import { PRICING } from '@/shared';
@@ -34,9 +34,9 @@ export function UpgradePrompt({ message, showStarterUpgrade = false }: UpgradePr
   const isPending = pendingPlan !== null;
 
   return (
-    <div className="rounded-xl border border-border bg-card p-6 text-center space-y-4">
-      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-        <Lock className="h-6 w-6 text-primary" />
+    <div className="rounded-2xl border border-[#C4A574]/20 bg-gradient-to-br from-[#C4A574]/5 to-transparent p-6 text-center space-y-4">
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#C4A574]/10">
+        <Lock className="h-7 w-7 text-[#C4A574]" />
       </div>
 
       <div className="space-y-1.5">
@@ -49,7 +49,7 @@ export function UpgradePrompt({ message, showStarterUpgrade = false }: UpgradePr
           href={FACEBOOK_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 px-5 py-2.5 text-sm font-medium hover:bg-yellow-100 dark:hover:bg-yellow-900/30 transition-colors"
+          className="inline-flex items-center justify-center gap-2 rounded-xl border border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-400 px-5 py-2.5 text-sm font-medium hover:bg-yellow-100 dark:hover:bg-yellow-900/30 transition-colors"
         >
           <MessageCircle className="h-4 w-4" />
           Upgrade pending — Message us on Facebook
@@ -58,7 +58,7 @@ export function UpgradePrompt({ message, showStarterUpgrade = false }: UpgradePr
         <button
           onClick={() => handleUpgrade(targetPlan)}
           disabled={loading}
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-5 py-2.5 text-sm font-medium hover:bg-primary/90 disabled:opacity-50 transition-colors"
+          className="btn-primary inline-flex items-center justify-center gap-2 disabled:opacity-50"
         >
           {loading ? (
             'Please wait…'

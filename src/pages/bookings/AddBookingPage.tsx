@@ -277,7 +277,7 @@ export function AddBookingPage() {
             <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} placeholder="Any additional notes..." className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none" />
           </section>
 
-          <button type="submit" disabled={createMutation.isPending} className="w-full rounded-lg bg-primary py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors">
+          <button type="submit" disabled={createMutation.isPending} className="btn-primary w-full disabled:opacity-50">
             {createMutation.isPending ? 'Creating...' : 'Create Booking'}
           </button>
         </form>

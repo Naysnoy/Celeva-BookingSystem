@@ -459,11 +459,7 @@ export function EditBookingPage() {
         <button
           type="submit"
           disabled={saveMutation.isPending}
-          className="w-full rounded-xl py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50 transition-all duration-150"
-          style={{
-            background: 'linear-gradient(135deg, hsl(45 58% 62%) 0%, hsl(38 55% 52%) 100%)',
-            boxShadow: saveMutation.isPending ? 'none' : '0 2px 12px hsla(45, 55%, 50%, 0.28)',
-          }}
+          className="btn-primary w-full disabled:opacity-50"
         >
           {saveMutation.isPending ? 'Saving…' : 'Save Changes'}
         </button>
